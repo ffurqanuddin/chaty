@@ -26,7 +26,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     // TODO: implement initState
     super.initState();
 
-
     ///Update User Online Status and last active time and store it firestore
     UserOnlineStatusHandler().initializeUserOnlineStatus();
 
@@ -39,9 +38,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             .whenData((data) => data.docs
                 .map((e) => ChatUserModel.fromJson(e.data()))
                 .toList()
-                .where((user) => user.name
-                    .toLowerCase()
-                    .contains(searchController.text.toLowerCase()))
+                .where((user) =>
+                    (user.name)
+                        .toLowerCase()
+                        .contains(searchController.text.toLowerCase()) ||
+                    (user.email)
+                        .toLowerCase()
+                        .contains(searchController.text.toLowerCase()))
                 .toList());
 
         if (asyncData.hasValue) {
@@ -49,8 +52,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         } else {
           searchingList.clear();
         }
-
-        print("\n\n\n\n\n\n\n whenData() method called!");
       } else {
         searchingList.clear();
       }
