@@ -29,7 +29,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     ///Update User Online Status and last active time and store it firestore
     UserOnlineStatusHandler().initializeUserOnlineStatus();
 
-    ///------Search User--------///
+    ///------Search User---------///
     searchController.addListener(() async {
       // Update the searchingList state variable with the list of users that match the search query.
       if (searchController.text.isNotEmpty) {
