@@ -4,19 +4,43 @@ import 'package:chaty/middleware/firestore_middleware.dart';
 import 'package:chaty/models/chat_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../apis/user_online_status_handler.dart';
 
-
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  HomePage({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  List<ChatUserModel> searchingList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    ///Update User Online Status and last active time and store it firestore
+    UserOnlineStatusHandler().initializeUserOnlineStatus();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       ///---------AppBar----------///
-      appBar: PreferredSize(preferredSize: Size(double.infinity, 7.h), child: HomeAppBar()),
+      appBar: PreferredSize(
+          preferredSize: Size(double.infinity, 7.h),
+          child: HomeAppBar(
+            searchingList: searchingList,
+          )),
+
       ///------Body---------///
       body: ref.watch(getAllUsersDataStreamProvider).when(
             ///Data
@@ -24,14 +48,17 @@ class HomePage extends ConsumerWidget {
               final List<QueryDocumentSnapshot<Map<String, dynamic>>> myData =
                   data.docs;
 
-              final List list =
+              final List<ChatUserModel> list =
                   myData.map((e) => ChatUserModel.fromJson(e.data())).toList();
-
               if (list.isNotEmpty) {
                 return ListView.builder(
-                  itemCount: list.length,
+                  itemCount: ref.watch(searchingProvider)
+                      ? searchingList.length
+                      : list.length,
                   itemBuilder: (context, index) => ChatUserCard(
-                    user: list[index],
+                    user: ref.watch(searchingProvider)
+                        ? searchingList[index]
+                        : list[index],
                   ),
                 );
               } else {
@@ -55,11 +82,9 @@ class HomePage extends ConsumerWidget {
   }
 }
 
-///Providers
+///----------------------------------***Providers***------------------------------------------///
 final getAllUsersDataStreamProvider =
     StreamProvider((ref) => FirestoreMiddleWare().getAllUserData());
 
 final getCurrentUsersDataStreamProvider =
     StreamProvider((ref) => FirestoreMiddleWare().getCurrentUserData());
-
-

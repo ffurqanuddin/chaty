@@ -31,7 +31,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(),
+                builder: (context) => HomePage(),
               ));
         }
       },

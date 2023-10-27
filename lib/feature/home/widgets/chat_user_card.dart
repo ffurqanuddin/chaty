@@ -1,8 +1,10 @@
-
 import 'package:chaty/models/chat_user_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../../../apis/user_online_status_handler.dart';
 
 class ChatUserCard extends StatelessWidget {
   ChatUserCard({super.key, required this.user});
@@ -10,16 +12,21 @@ class ChatUserCard extends StatelessWidget {
   ChatUserModel user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
       child: Card(
         elevation: 1,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: ListTile(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
 
           ///Profile Image
           leading: CircleAvatar(
@@ -31,7 +38,9 @@ class ChatUserCard extends StatelessWidget {
                 border: Border.all(color: Colors.black, width: 1.0),
                 shape: BoxShape.circle,
                 fit: BoxFit.cover,
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(30.0),
+                ),
               )),
 
           ///Profile Name & Blue Tick
