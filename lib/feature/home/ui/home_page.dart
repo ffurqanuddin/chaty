@@ -26,22 +26,39 @@ class _HomePageState extends ConsumerState<HomePage> {
     // TODO: implement initState
     super.initState();
 
+
     ///Update User Online Status and last active time and store it firestore
     UserOnlineStatusHandler().initializeUserOnlineStatus();
 
-    searchController.addListener(()  {
+    ///------Search User--------///
+    searchController.addListener(() async {
       // Update the searchingList state variable with the list of users that match the search query.
-      searchingList = ref.watch(getAllUsersDataStreamProvider).whenData(
-          (data) => data.docs
-              .map((e) => ChatUserModel.fromJson(e.data()))
-              .toList()
-              .where((user) => user.name
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()))
-              .toList()) as List<ChatUserModel>;
+      if (searchController.text.isNotEmpty) {
+        final AsyncValue<List<ChatUserModel>> asyncData = await ref
+            .watch(getAllUsersDataStreamProvider)
+            .whenData((data) => data.docs
+                .map((e) => ChatUserModel.fromJson(e.data()))
+                .toList()
+                .where((user) => user.name
+                    .toLowerCase()
+                    .contains(searchController.text.toLowerCase()))
+                .toList());
+
+        if (asyncData.hasValue) {
+          searchingList = asyncData.asData!.value;
+        } else {
+          searchingList.clear();
+        }
+
+        print("\n\n\n\n\n\n\n whenData() method called!");
+      } else {
+        searchingList.clear();
+      }
 
       setState(() {});
     });
+
+    ///-----------------------------------------------------------//////
   }
 
   @override

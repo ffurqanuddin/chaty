@@ -59,13 +59,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     gotoNextPage();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    gotoNextPage();
-    getThemeValueFromSharedPref();
-  }
+  ///---------Changes----- Oct 27 18:26 ----///
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   gotoNextPage();
+  //   getThemeValueFromSharedPref();
+  // }
 
   @override
   Widget build(BuildContext context) {
