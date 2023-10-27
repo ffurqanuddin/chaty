@@ -16,9 +16,11 @@ class HomeAppBar extends ConsumerStatefulWidget {
   HomeAppBar({
     super.key,
     required this.searchingList,
+    required this.searchController,
   });
 
-  List<ChatUserModel> searchingList;
+  List searchingList;
+  TextEditingController searchController;
 
   @override
   ConsumerState<HomeAppBar> createState() => _HomeAppBarState();
@@ -38,20 +40,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
       title: searching
           ? TextField(
               maxLines: 1,
-              onChanged: (value) {
-                // widget.searchingList.clear();
-                print("############\n(1)   $value");
-                for (var i in widget.searchingList) {
-                  if (i.name.toLowerCase().contains(value.toLowerCase()) ||
-                      i.email.contains(value.toLowerCase())) {
-                    widget.searchingList.add(i);
-                    print("############\nI value =    $i");
-                  }
-                  setState(() {});
-
-                }
-
-              },
+              controller: widget.searchController,
               onTapOutside: (event) {
                 FocusManager.instance.primaryFocus?.unfocus();
               },

@@ -19,6 +19,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   List<ChatUserModel> searchingList = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -27,6 +28,20 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     ///Update User Online Status and last active time and store it firestore
     UserOnlineStatusHandler().initializeUserOnlineStatus();
+
+    searchController.addListener(()  {
+      // Update the searchingList state variable with the list of users that match the search query.
+      searchingList = ref.watch(getAllUsersDataStreamProvider).whenData(
+          (data) => data.docs
+              .map((e) => ChatUserModel.fromJson(e.data()))
+              .toList()
+              .where((user) => user.name
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()))
+              .toList()) as List<ChatUserModel>;
+
+      setState(() {});
+    });
   }
 
   @override
@@ -39,6 +54,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           preferredSize: Size(double.infinity, 7.h),
           child: HomeAppBar(
             searchingList: searchingList,
+            searchController: searchController,
           )),
 
       ///------Body---------///
