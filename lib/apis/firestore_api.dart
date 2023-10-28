@@ -116,5 +116,13 @@ class FirestoreAPI {
 
 
 
+  Future updateProfileImage({required String image})async{
+    await firestore.collection(userCollection).doc(currentUserID).update({
+      "image": image,
+    });
+  }
+
+
+
 
 }

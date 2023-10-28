@@ -1,11 +1,12 @@
-import 'package:chaty/feature/home/ui/home_page.dart';
-import 'package:chaty/helper/helper.dart';
-import 'package:chaty/middleware/firestore_middleware.dart';
-import 'package:extended_image/extended_image.dart';
+import 'dart:io';
+
+import 'package:chaty/feature/profile/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../home/widgets/home_screen_app_bar.dart';
 import '../widgets/customprofiletextfield_widget.dart';
+import '../widgets/save_button.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -19,6 +20,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   TextEditingController aboutController = TextEditingController();
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  ///Image
+  
 
   @override
   void dispose() {
@@ -56,42 +60,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
 
               ///Profile Image Change
-              Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Circular Avatar
-                    CircleAvatar(
-                      radius: 25.w,
-                      child: ExtendedImage.network(
-                          width: 49.w,
-                          height: 49.w,
-                          shape: BoxShape.circle,
-                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          borderRadius: BorderRadius.circular(25.w),
-                          fit: BoxFit.cover),
-                    ),
-                    // Username text positioned around the avatar
-                    Positioned(
-                      bottom: 3.w,
-                      right: 3.w,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.camera_alt,
-                              size: 21.sp,
-                              color: Colors.black,
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ProfileImageWidget(),
+              
 
               ///-------Username------///
               CustomProfileTextField(
@@ -130,8 +100,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
               ///----------Save Changes----------///
               SaveChangesButton(
-                  usernameController: usernameController,
-                  aboutController: aboutController),
+                usernameController: usernameController,
+                aboutController: aboutController,
+                pickedImagePath: ref.watch(pickedProfileImagePathStateProvider),
+              ),
             ],
           ),
         ),
@@ -140,50 +112,4 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 }
 
-////////-------Save Changes Button--------///////////
-class SaveChangesButton extends StatelessWidget {
-  const SaveChangesButton({
-    super.key,
-    required this.usernameController,
-    required this.aboutController,
-  });
-
-  final TextEditingController usernameController;
-  final TextEditingController aboutController;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Helper.showLoadingDialogBox(context);
-        if (usernameController.text.isNotEmpty &&
-            usernameController.text != "" &&
-            usernameController.text != " ") {
-          FirestoreMiddleWare()
-              .updateCurrentUserUsername(username: usernameController.text);
-        }
-
-        if (aboutController.text.isNotEmpty &&
-            aboutController.text != "" &&
-            aboutController.text != " ") {
-          FirestoreMiddleWare()
-              .updateCurrentUserAbout(about: aboutController.text);
-        }
-
-        ///Close Loading DialogBox
-        Navigator.pop(context);
-
-        ///Back to Home
-        Navigator.pop(context);
-        Navigator.pop(context);
-      },
-      style: ElevatedButton.styleFrom(
-        fixedSize: Size(85.w, 6.5.h),
-      ),
-      child: const Text(
-        "Save Changes",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
+final pickedProfileImagePathStateProvider = StateProvider<String>((ref) => "");

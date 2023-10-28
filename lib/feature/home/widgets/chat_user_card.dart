@@ -1,10 +1,8 @@
 import 'package:chaty/models/chat_user_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../apis/user_online_status_handler.dart';
 
 class ChatUserCard extends StatelessWidget {
   ChatUserCard({super.key, required this.user});

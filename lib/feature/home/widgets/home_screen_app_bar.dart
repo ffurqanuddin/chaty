@@ -1,26 +1,25 @@
-import 'package:chaty/feature/profile/ui/profile_page.dart';
-import 'package:chaty/middleware/firestore_middleware.dart';
-import 'package:chaty/models/chat_user_model.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:chaty/feature/profile/ui/profile_page.dart'; // Import the profile page
+import 'package:extended_image/extended_image.dart'; // Import an extended image widget
+import 'package:flutter/cupertino.dart'; // Import Cupertino package for iOS-style widgets
+import 'package:flutter/material.dart'; // Import Flutter's material library for UI components
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Flutter Riverpod for state management
+import 'package:responsive_sizer/responsive_sizer.dart'; // Import responsive sizing for different screens
 
-import '../../../middleware/auth_middleware.dart';
-import '../../customization/ui/customization_page.dart';
-import '../../get_blue_tick/ui/get_blue_tick.dart';
-import '../ui/home_page.dart';
+import '../../../middleware/auth_middleware.dart'; // Import middleware for authentication
+import '../../../middleware/firestore_middleware.dart'; // Import middleware for Firestore interactions
+import '../../customization/ui/customization_page.dart'; // Import customization page
+import '../../get_blue_tick/ui/get_blue_tick.dart'; // Import a page for getting a blue verification tick
 
 class HomeAppBar extends ConsumerStatefulWidget {
   HomeAppBar({
-    super.key,
-    required this.searchingList,
-    required this.searchController,
+    super.key, // An optional key for identifying the widget
+    required this.searchingList, // List for searching (probably user data)
+    required this.searchController, // Controller for the search input field
   });
 
-  List searchingList;
-  TextEditingController searchController;
+  List searchingList; // List for searching
+  TextEditingController
+      searchController; // Controller for the search input field
 
   @override
   ConsumerState<HomeAppBar> createState() => _HomeAppBarState();
@@ -28,13 +27,14 @@ class HomeAppBar extends ConsumerStatefulWidget {
 
 class _HomeAppBarState extends ConsumerState<HomeAppBar> {
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    Icon searchIcon = ref.watch(searchButtonIconStateProvider);
-    bool searching = ref.watch(searchingProvider);
+  Widget build(BuildContext context) {
+    Icon searchIcon =
+        ref.watch(searchButtonIconStateProvider); // Get the search button icon
+    bool searching =
+        ref.watch(searchingProvider); // Check if the app is in searching mode
+
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: false, // Hide the leading back button
 
       ///---------App Logo & Search Field---------///
       title: searching
@@ -45,13 +45,14 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
               style: TextStyle(fontSize: 17.5.sp),
+              // Style for the search text field
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "Search by name, email",
               ),
             )
           : const Text(
-              "Chaty",
+              "Chaty", // Display "Chaty" when not in search mode
               style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 1.3,
@@ -65,14 +66,17 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           onPressed: () {
             if (searching == false) {
               ///---If Searching-------///
-              ref.read(searchingProvider.notifier).state = true;
+              ref.read(searchingProvider.notifier).state =
+                  true; // Enable searching mode
               ref.read(searchButtonIconStateProvider.notifier).state =
-                  const Icon(CupertinoIcons.clear);
+                  const Icon(CupertinoIcons.clear); // Change the icon to clear
             } else {
               ///----If Searching false------///
-              ref.read(searchingProvider.notifier).state = false;
+              ref.read(searchingProvider.notifier).state =
+                  false; // Disable searching mode
               ref.read(searchButtonIconStateProvider.notifier).state =
-                  const Icon(CupertinoIcons.search);
+                  const Icon(
+                      CupertinoIcons.search); // Change the icon to search
             }
           },
           icon: searchIcon,
@@ -108,31 +112,36 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
 
                           ///Profile Image
                           leading: CircleAvatar(
+                            radius: 9.w,
                             backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(userImage),
-                            child: ExtendedImage.network(
-                              userImage,
-                              cache: true,
-                              border:
-                                  Border.all(color: Colors.black, width: 1.0),
-                              shape: BoxShape.circle,
-                              fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: ExtendedImage.network(
+                                height: 9.w,
+                                width: 9.w,
+                                fit: BoxFit.cover,
+                                userImage,
+                              ),
                             ),
                           ),
 
                           ///Logout
                           trailing: IconButton(
-                              onPressed: () {
-                                AuthMiddleWare().logOutNow(context);
-                              },
-                              icon: const Icon(Icons.logout)),
+                            onPressed: () {
+                              AuthMiddleWare()
+                                  .logOutNow(context); // Log out the user
+                            },
+                            icon:
+                                const Icon(Icons.logout), // Show a logout icon
+                          ),
 
                           ///Goto Profile Screen
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const ProfilePage(),
+                                  builder: (context) =>
+                                      ProfilePage(), // Navigate to the user's profile page
                                 ));
                           },
                         ),
@@ -152,7 +161,8 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CustomizationPage(),
+                                  builder: (context) =>
+                                      CustomizationPage(), // Navigate to the customization page
                                 ));
                           },
                         )),
@@ -174,7 +184,8 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const GetBlueTickPage(),
+                                  builder: (context) =>
+                                      const GetBlueTickPage(), // Navigate to the blue tick page
                                 ));
                           },
                         )),
@@ -200,7 +211,13 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
 
 ///---Search Button Icon-----///
 final searchButtonIconStateProvider = StateProvider<Icon>(
-  (ref) => const Icon(Icons.search),
+  (ref) => const Icon(
+      Icons.search), // Set the initial search button icon to 'search'
 );
 
-final searchingProvider = StateProvider<bool>((ref) => false);
+final searchingProvider =
+    StateProvider<bool>((ref) => false); // Initialize searching mode as false
+
+final getCurrentUsersDataStreamProvider = StreamProvider((ref) =>
+    FirestoreMiddleWare()
+        .getCurrentUserData()); // Provide user data stream from Firestore
