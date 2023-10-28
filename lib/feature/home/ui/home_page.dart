@@ -1,3 +1,4 @@
+import 'package:chaty/feature/chat/ui/chat_page.dart';
 import 'package:chaty/feature/home/widgets/chat_user_card.dart';
 import 'package:chaty/feature/home/widgets/home_screen_app_bar.dart';
 import 'package:chaty/middleware/firestore_middleware.dart';
@@ -69,6 +70,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                       user: ref.watch(searchingProvider)
                           ? searchingList[index]
                           : list[index],
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(user: list[index]),));
+                      },
                     ),
                   );
                 } else {

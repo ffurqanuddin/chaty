@@ -5,9 +5,11 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 
 class ChatUserCard extends StatelessWidget {
-  ChatUserCard({super.key, required this.user});
+  ChatUserCard({super.key, required this.user,required this.onTap });
 
   ChatUserModel user;
+
+  final onTap;
 
   @override
   Widget build(
@@ -22,6 +24,7 @@ class ChatUserCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
+          onTap: onTap,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -31,6 +34,8 @@ class ChatUserCard extends StatelessWidget {
               radius: 25,
               // backgroundColor: Colors.transparent,
               child: ExtendedImage.network(
+                height: 14.w,
+                width: 14.w,
                 user.image,
                 cache: true,
                 border: Border.all(color: Colors.black, width: 1.0),

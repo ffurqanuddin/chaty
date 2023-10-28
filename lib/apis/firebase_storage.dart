@@ -10,6 +10,9 @@ class FirebaseStorageAPI {
   // Function to upload an image to Firebase Storage and get its download URL
   Future<String> uploadImageAndGetDownloadURL(String imagePath) async {
     try {
+
+
+      // final extension = imagePath.path.split(".").last;
       // Create a reference to the Firebase Storage path for the user's profile image
       Reference storageReference = FirebaseStorage.instance.ref().child("profile_images/${FirestoreAPI().currentUserID}.jpg");
 
