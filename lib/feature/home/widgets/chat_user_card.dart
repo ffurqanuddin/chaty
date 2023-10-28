@@ -65,6 +65,7 @@ class ChatUserCard extends StatelessWidget {
             ],
           ),
 
+
           ///Message
           subtitle: Text(
             user.about,

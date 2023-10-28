@@ -111,16 +111,19 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                           ),
 
                           ///Profile Image
-                          leading: CircleAvatar(
-                            radius: 9.w,
-                            backgroundColor: Colors.transparent,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: ExtendedImage.network(
-                                height: 9.w,
-                                width: 9.w,
-                                fit: BoxFit.cover,
-                                userImage,
+                          leading: Hero(
+                            tag: "profile_image",
+                            child: CircleAvatar(
+                              radius: 9.w,
+                              backgroundColor: Colors.transparent,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: ExtendedImage.network(
+                                  height: 9.w,
+                                  width: 9.w,
+                                  fit: BoxFit.cover,
+                                  userImage,
+                                ),
                               ),
                             ),
                           ),

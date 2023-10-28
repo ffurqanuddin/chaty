@@ -19,21 +19,24 @@ class ProfileImageWidget extends ConsumerWidget {
         alignment: Alignment.center,
         children: [
           // Circular Avatar
-          CircleAvatar(
-            radius: 25.w, // Set the radius of the circular avatar
-            backgroundImage: (ref.watch(pickedProfileImagePathStateProvider) != "") ? FileImage(File(ref.watch(pickedProfileImagePathStateProvider),), ) : null,
-            child: (ref.watch(pickedProfileImagePathStateProvider) == "")
-                ?
-            ref.watch(getCurrentUsersDataStreamProvider).when(data: (data) {
-              final String userImage = data["image"];
-              return ExtendedImage.network(
-                  width: 49.w,
-                  height: 49.w,
-                  shape: BoxShape.circle,
-                  userImage,
-                  borderRadius: BorderRadius.circular(25.w),
-                  fit: BoxFit.cover); // Display the user's profile image
-            }, error: (error, stackTrace) => const Text(""), loading:  () => const CircularProgressIndicator()) : null,
+          Hero(
+            tag: "profile_image",
+            child: CircleAvatar(
+              radius: 25.w, // Set the radius of the circular avatar
+              backgroundImage: (ref.watch(pickedProfileImagePathStateProvider) != "") ? FileImage(File(ref.watch(pickedProfileImagePathStateProvider),), ) : null,
+              child: (ref.watch(pickedProfileImagePathStateProvider) == "")
+                  ?
+              ref.watch(getCurrentUsersDataStreamProvider).when(data: (data) {
+                final String userImage = data["image"];
+                return ExtendedImage.network(
+                    width: 49.w,
+                    height: 49.w,
+                    shape: BoxShape.circle,
+                    userImage,
+                    borderRadius: BorderRadius.circular(25.w),
+                    fit: BoxFit.cover); // Display the user's profile image
+              }, error: (error, stackTrace) => const Text(""), loading:  () => const CircularProgressIndicator()) : null,
+            ),
           ),
 
           ///----------Edit Button------///

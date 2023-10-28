@@ -71,7 +71,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ? searchingList[index]
                           : list[index],
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(user: list[index]),));
+
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => ChatPage(user: list[index]),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(user: list[index]),));
                       },
                     ),
                   );
